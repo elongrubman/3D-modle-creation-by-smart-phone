@@ -1,16 +1,11 @@
 //
-// Created by  Elon Grubman on 14/11/2019.
+// Created by  Elon Grubman on 14/11/2019.
 //
 
 #ifndef NC_RD_FACEMASK_FRAME_H
 #define NC_RD_FACEMASK_FRAME_H
 
-#include <nlohmann/json.hpp>
-#include <iostream>
-#include <opencv2/opencv.hpp>
-#include <fstream>
-#include <iomanip>
-#include <sstream>
+#include "includes.h"
 
 
 using namespace std;
@@ -132,9 +127,15 @@ public:
  * @param c2 vector to be filled cam_data[16:24]
  * @param features - vector to hold all the features
  */
-void parseJson(string pathToJson, vector<float>* c1, vector<float>* c2, vector<worldPoint>* features){
+void parseJson(
+        string pathToJson,
+        vector<float>* c1,
+        vector<float>* c2,
+        vector<worldPoint>* features)
+{
 
     ifstream i(pathToJson);
+    assert(i.is_open());
     json j = json::parse(i);
     string cam_data = j["cam_data"];
     stringstream ss(cam_data);
@@ -197,7 +198,13 @@ void parseJson(string pathToJson, vector<float>* c1, vector<float>* c2, vector<w
  * @param frame - pointer to current frame
  * @param window_name - the title to the window image
  */
-void projectFromWorldToImage(string path_to_image, float i, float j, float k, Frame* frame, string window_name){
+void projectFromWorldToImage(string path_to_image,
+                             float i,
+                             float j,
+                             float k,
+                             Frame* frame,
+                             string window_name)
+{
     Mat im1 = imread(path_to_image);
     Matx<float, 3, 1> Pw(i, j, k);
     Point2d p1 = frame->projection(Pw);
